@@ -15,6 +15,8 @@ Examples:
 import argparse
 import subprocess
 import sys
+
+from logger import configure_logging, get_logger
  
  
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -73,6 +75,17 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "-q", "--quiet",
         action="store_true",
         help="Minimal output",
+    )
+    parser.add_argument(
+        "--log-level", default="INFO",
+        choices=["DEBUG", "INFO", "STEP", "WARNING", "ERROR"],
+        help="Plasma Checker log level (default: INFO)",
+    )
+    parser.add_argument(
+        "--log-dir",
+        default="plasma_checker_logs/",
+        metavar="PATH",
+        help="Directory to save log files (default: none)",
     )
     parser.add_argument(
         "--html-report",
@@ -154,13 +167,26 @@ def main() -> int:
     parser = build_arg_parser()
     args = parser.parse_args()
  
-    cmd = build_pytest_command(args)
+    log_dir = None if args.log_dir.lower() == "none" else args.log_dir
+    configure_logging(level=args.log_level, log_dir=log_dir)
+    log = get_logger("plasma_checker")
  
-    print(f"[plasma_checker] Running: {' '.join(cmd)}\n")
+    log.info("plasma_checker starting")
+    log.debug("Parsed args: %s", args)
+ 
+    cmd = build_pytest_command(args)
+    log.step("Handing off to pytest")
+    log.debug("pytest command: %s", " ".join(cmd))
  
     result = subprocess.run(cmd)
-    return result.returncode
  
+    if result.returncode == 0:
+        log.info("All tests passed ✓")
+    else:
+        log.error("Test run finished with failures (exit code %d)", result.returncode)
+ 
+    return result.returncode
+
  
 if __name__ == "__main__":
     sys.exit(main())
