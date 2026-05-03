@@ -16,7 +16,7 @@ import argparse
 import subprocess
 import sys
 
-from logger import configure_logging, get_logger
+from utils.logger import configure_logging, get_logger
  
  
 def build_arg_parser() -> argparse.ArgumentParser:
