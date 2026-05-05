@@ -6,7 +6,7 @@
 ## TC-1: Select Plan Page Loads and Verify Page elements (Select Plan Page)
 
 ### Test Ranking
-- Priority: Critial
+- Priority: Critical
 - Rank: 1
 
 ### Description
@@ -18,7 +18,7 @@
 
 ### Test Steps
 1. Verify that all loading bars or loading elements have disappeared
-2. Url should contain `/select-plan`
+2. URL should contain `/select-plan`
 3. Encounter cards with scan selections are visible
 4. Verify the Cancel button appears
 5. Verify that the continue button appears but is disabled
@@ -44,7 +44,7 @@
 
 ### Test Steps
 1. Verify that all loading bars or loading elements have disappeared
-2. Url should contain `/schedule-scan`
+2. URL should contain `/schedule-scan`
 3. Location cards are visible
 4. Verify the Back button appears
 5. Verify that the continue button appears but is disabled
@@ -70,7 +70,7 @@
 
 ### Test Steps
 1. Verify that all loading bars or loading elements have disappeared
-2. Url should contain `reserve-appointment`
+2. URL should contain `reserve-appointment`
 3. The Payment Accordion is visible
 4. Verify the Card Accordion is open while the other (Bank, Affirm) are closed
 5. Verify the Back button appears
@@ -88,16 +88,16 @@
 - Rank: 1
 
 ### Description
-> Verify that the Reserve Appointment page loads with all the proper web elements
+> Verify that the Scan Confirm page loads with all the proper web elements
 
 ### Preconditions
 - Logged in to a member account
-- Or Sign up as a new member and follow the sign up process
+- Or sign up as a new member and follow the sign up process
 - Member has navigated to the Scan Confirm page from the previous booking page
 
 ### Test Steps
 1. Verify that all loading bars or loading elements have disappeared
-2. Url should contain `/scan-confirm`
+2. URL should contain `/scan-confirm`
 3. The Begin Medical Questionnaire button is visible
 4. Verify Scan Details card is visible
 5. Verify the Go to Dashboard link button appears
@@ -195,9 +195,9 @@
 
 ### Preconditions
 - Logged in to a member account
-- Or Sign up as a new member and follow the sign up process
+- Or sign up as a new member and follow the sign up process
 - Member has navigated to the Reserve Appointment page from the previous booking page
-- Test Card Credentials to enter into the form
+- Test card credentials to enter into the form
 
 ### Test Steps
 1. Enter the Card Number
@@ -208,7 +208,7 @@
 6. Verify the Continue button has been enabled
 
 ### Expected Result
-> The continue button has been enabled and the user is ready to advance to the next step
+> The Continue button has been enabled and the user is ready to advance to the next step
 
 ---
 
@@ -247,7 +247,7 @@
 8. Verify the Affirm description
 
 ### Expected Result
-> Verify the user can navigate through the different accordians and their form inputs are displayed
+> Verify the user can navigate through the different accordions and their form inputs are displayed
 
 ---
 
@@ -258,20 +258,20 @@
 - Rank: 5
 
 ### Description
-> Verify selecting a scan 
+> Verify selecting a scan
 
 ### Preconditions
 - Logged in to a member account and click on the "Book a Scan" button
-- Or Sign up as a new member and follow the sign up process
+- Or sign up as a new member and follow the sign up process
 
 ### Test Steps
-1. Select Any Scan from the list of Scan Encounter cards
-2. The Page should auto-scroll to the bottom
+1. Select any scan from the list of Scan Encounter cards
+2. The page should auto-scroll to the bottom
 3. Addon card appears with the selected Scan's info
 4. Verify that the Continue button is now enabled
 
 ### Expected Result
-> The page auto scrolls to the bottom of the page, displays an Addon card with the selected plan info, and the continue button is enabled.
+> The page auto-scrolls to the bottom of the page, displays an Addon card with the selected plan info, and the Continue button is enabled.
 
 ---
 
