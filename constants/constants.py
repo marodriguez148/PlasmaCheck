@@ -1,5 +1,5 @@
 MEMBER_FACING_PORTAL_URL = "https://myezra-staging.ezra.com/"
-PROVIDER_FACING_PORTAL_URL = "https://staging-hub.ezra.com/sign-in/"
+PROVIDER_FACING_PORTAL_URL = "https://staging-hub.ezra.com/"
 DEFAULT_QA_PASSWORD = "Hemogoblin!1"
 
 TEST_CREDENTIALS = {
