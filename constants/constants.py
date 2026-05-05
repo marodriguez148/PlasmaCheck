@@ -8,6 +8,11 @@ TEST_CREDENTIALS = {
         "password": DEFAULT_QA_PASSWORD,
         "userrole": "member"
     },
+    "second_qa_user": {
+        "username": "qa2@function_ezra.com",
+        "password": DEFAULT_QA_PASSWORD,
+        "userrole": "member"
+    },
     "default_qa_admin_user": {
         "username": "michael.krakovsky+test_interview@functionhealth.com",
         "password": "12121212Aa",
