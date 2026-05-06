@@ -3,8 +3,8 @@ from playwright.sync_api import sync_playwright
 
 @pytest.fixture(scope="session")
 def page(request):
-    browser_name = request.config.getoption("--browser")
-    headless = request.config.getoption("--headless")
+    browser_name = request.config.getoption("--browser")[0]
+    headless = request.config.getoption("--headed")
 
     with sync_playwright() as p:
         if browser_name == "chromium":

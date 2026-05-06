@@ -138,9 +138,9 @@ def build_pytest_command(args: argparse.Namespace) -> list[str]:
         cmd.append("--collect-only")
  
     # Pass plasma_checker-specific flags through to conftest fixtures
-    cmd.extend([f"--browser-type={args.browser}"])
+    cmd.extend([f"--browser={args.browser}"])
     if args.headless:
-        cmd.append("--headless")
+        cmd.append("--headed=false")
  
     # Output
     if args.verbose:

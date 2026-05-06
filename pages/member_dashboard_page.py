@@ -6,7 +6,7 @@ from constants.constants import MEMBER_FACING_PORTAL_URL
 class MemberDashboardPage(LoginPage):
     def __init__(self, 
             page: Page, 
-            url: str = f"{MEMBER_FACING_PORTAL_URL}/", 
+            url: str = f"{MEMBER_FACING_PORTAL_URL}", 
             test_credentials: dict = None,
             login_required: bool = True
         ):
@@ -16,8 +16,7 @@ class MemberDashboardPage(LoginPage):
             test_credentials=test_credentials, 
             login_required=login_required
         )
-        self.book_a_scan_button = "button[data-testid='book-scan-btn']"
+        self.book_a_scan_button = "div[class*='my-appointments'] button[data-testid='book-scan-btn']"
 
     def verify_dashboard_elements(self) -> None:
-        assert self.page.is_visible(self.book_a_scan_button), "Book a Scan button is not visible on the member dashboard page."
-
+        self.wait_for_elem_visible(self.book_a_scan_button)
