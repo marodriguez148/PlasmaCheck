@@ -1,18 +1,11 @@
 import logging
-import os
 import pytest
-from pathlib import Path
 from playwright.sync_api import sync_playwright
 from utils.logger import configure_logging
 
 
 def pytest_configure(config):
-    log_file = os.environ.get("PLASMA_LOG_FILE")
-    if log_file:
-        p = Path(log_file)
-        configure_logging(level="INFO", log_dir=str(p.parent), log_filename=p.name)
-    else:
-        configure_logging(level="INFO", log_dir="plasma_checker_logs/")
+    configure_logging(level="INFO", log_dir="plasma_checker_logs/")
 
 
 @pytest.hookimpl(hookwrapper=True)

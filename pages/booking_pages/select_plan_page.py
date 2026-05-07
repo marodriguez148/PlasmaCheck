@@ -17,7 +17,7 @@ class SelectPlanPage(BasePage):
         super().__init__(page, host=host, path=self.PATH)
         self.page_title = "Select Your Plan"
         self.dob_input_selector = "input[id='dob']"
-        self.sex_at_birth_dropdown_selector = Dropdown(self.page, "div[class='multiselect']")
+        self.sex_at_birth_dropdown_selector = Dropdown(self.page, "div[class='multiselect']", options=["Male", "Female"])
         self.plan_encounter_card_selector = "div[class*='encounter-card']"
         self.continue_button_selector = "button:has-text('Continue')"
         self.cancel_button_selector = "button:has-text('Cancel')"

@@ -97,5 +97,5 @@ class BasePage:
     def sign_out(self) -> None:
         logger.info("Attempting to sign out.")
         self.page.click(self.sign_out)
-        assert self.page.is_visible("button[class*='desktop-logout']") == False, "Sign out failed, logout button still visible."
+        self.wait_for_elem_invisible("button[class*='desktop-logout']")
         assert "/sign_in" in self.current_url, f"Expected to be redirected to login page after sign out, but current URL is '{self.current_url}'"

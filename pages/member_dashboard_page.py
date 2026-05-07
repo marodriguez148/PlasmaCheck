@@ -1,6 +1,5 @@
 from pages.login_page import LoginPage
 from playwright.sync_api import Page
-from constants.constants import MEMBER_FACING_PORTAL_URL
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
