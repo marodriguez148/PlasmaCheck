@@ -106,7 +106,7 @@ def configure_logging(
     console_handler.setFormatter(ConsoleFormatter())
     root.addHandler(console_handler)
 
-    # File handler (optional)
+    # File handler 
     if log_dir is not None:
         log_path = Path(log_dir)
         log_path.mkdir(parents=True, exist_ok=True)

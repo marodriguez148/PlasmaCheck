@@ -3,6 +3,9 @@ import re
 from pages.base_page import BasePage
 from playwright.sync_api import Page, expect
 from constants.constants import MEMBER_FACING_PORTAL_URL, PROVIDER_FACING_PORTAL_URL
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 class LoginPage(BasePage):
     PATH = "sign-in"
@@ -36,7 +39,7 @@ class LoginPage(BasePage):
             self.login()
 
     def login(self) -> None:
-        self.logger.info(f"Attempting to log in with member: {self.test_credentials}")
+        logger.info(f"Attempting to log in with member: {self.test_credentials}")
         if self.test_credentials:
             self.page.fill(self.username_input, self.test_credentials.get("username"))
             self.page.fill(self.password_input, self.test_credentials.get("password"))
@@ -45,7 +48,7 @@ class LoginPage(BasePage):
         self.page.click(self.submit_button)
 
     def verify_login_page_elements(self) -> None:
-        self.logger.info("Verifying login page elements are visible.")
+        logger.info("Verifying login page elements are visible.")
         self.wait_for_elem_visible(self.username_input)
         self.wait_for_elem_visible(self.password_input)
         # assert self.sign_in_with_google_button.is_visible(), "Sign in with Google button is not visible on the login page."
@@ -57,7 +60,7 @@ class LoginPage(BasePage):
             self.wait_for_elem_visible(self.provider_sign_up_link)
 
     def verify_invalid_login(self) -> None:
-        self.logger.info("Verifying behavior for invalid login.")
+        logger.info("Verifying behavior for invalid login.")
         self.go_to_page()
         self.verify_login_page_elements()
         self.login()

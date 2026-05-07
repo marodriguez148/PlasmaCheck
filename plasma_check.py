@@ -13,11 +13,16 @@ Examples:
 """
  
 import argparse
+import os
 import subprocess
 import sys
+from datetime import datetime
+from pathlib import Path
 
 from utils.logger import configure_logging, get_logger
  
+logger = get_logger(__name__)
+
  
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -167,25 +172,40 @@ def main() -> int:
     parser = build_arg_parser()
     args = parser.parse_args()
  
-    log_dir = None if args.log_dir.lower() == "none" else args.log_dir
-    configure_logging(level=args.log_level, log_dir=log_dir)
-    log = get_logger("plasma_checker")
- 
-    log.info("plasma_checker starting")
-    log.debug("Parsed args: %s", args)
- 
+    configure_logging(level=args.log_level, log_dir=None)
+
+    log_dir = Path(args.log_dir)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_dir / f"plasma_{timestamp}.log"
+
+    env = os.environ.copy()
+    env["PLASMA_LOG_FILE"] = str(log_file)
+
+    logger.info("plasma_checker starting")
+    logger.debug("Parsed args: %s", args)
+
     cmd = build_pytest_command(args)
-    log.step("Handing off to pytest")
-    log.debug("pytest command: %s", " ".join(cmd))
- 
-    result = subprocess.run(cmd)
- 
-    if result.returncode == 0:
-        log.info("All tests passed ✓")
+    logger.step("Handing off to pytest")
+    logger.debug("pytest command: %s", " ".join(cmd))
+
+    pytest_lines = []
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, env=env) as proc:
+        for line in proc.stdout:
+            sys.stdout.write(line)
+            sys.stdout.flush()
+            pytest_lines.append(line)
+
+    with open(log_file, "a", encoding="utf-8") as fh:
+        fh.write("\n" + "=" * 60 + " PYTEST OUTPUT " + "=" * 60 + "\n")
+        fh.writelines(pytest_lines)
+
+    if proc.returncode == 0:
+        logger.info("All tests passed ✓")
     else:
-        log.error("Test run finished with failures (exit code %d)", result.returncode)
- 
-    return result.returncode
+        logger.error("Test run finished with failures (exit code %d)", proc.returncode)
+
+    return proc.returncode
 
  
 if __name__ == "__main__":

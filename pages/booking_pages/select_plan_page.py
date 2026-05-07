@@ -1,11 +1,13 @@
 import re
+import random
 
 from pages.base_page import BasePage
 from components.dropdown import Dropdown
 from playwright.sync_api import Page, expect
 from constants.constants import MEMBER_FACING_PORTAL_URL
-import random
-from tests.conftest import page
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class SelectPlanPage(BasePage):

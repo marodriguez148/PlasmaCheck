@@ -1,10 +1,45 @@
+import logging
+import os
 import pytest
+from pathlib import Path
 from playwright.sync_api import sync_playwright
+from utils.logger import configure_logging
+
+
+def pytest_configure(config):
+    log_file = os.environ.get("PLASMA_LOG_FILE")
+    if log_file:
+        p = Path(log_file)
+        configure_logging(level="INFO", log_dir=str(p.parent), log_filename=p.name)
+    else:
+        configure_logging(level="INFO", log_dir="plasma_checker_logs/")
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, f"rep_{rep.when}", rep)
+
+
+@pytest.fixture(autouse=True)
+def log_test_boundaries(request):
+    root = logging.getLogger("plasma_checker")
+    root.info("=" * 60)
+    root.info("START: %s", request.node.name)
+    root.info("=" * 60)
+    yield
+    rep = getattr(request.node, "rep_call", None)
+    outcome = "PASSED" if rep and rep.passed else "FAILED" if rep and rep.failed else "UNKNOWN"
+    root.info("END: %s (%s)", request.node.name, outcome)
+    root.info("=" * 60)
+
 
 @pytest.fixture(scope="session")
 def page(request):
     browser_name = request.config.getoption("--browser")[0]
     headless = request.config.getoption("--headed")
+
 
     with sync_playwright() as p:
         if browser_name == "chromium":
