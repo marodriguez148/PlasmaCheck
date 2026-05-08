@@ -35,6 +35,15 @@ def _step(self: logging.Logger, message: str, *args, **kwargs) -> None:
 logging.Logger.step = _step  # type: ignore[attr-defined]
 
 
+# ── Handlers ─────────────────────────────────────────────────────────────────
+
+class _LiveStdoutHandler(logging.StreamHandler):
+    """Resolves sys.stdout at emit time so pytest's in-process capture can't invalidate it."""
+    def emit(self, record: logging.LogRecord) -> None:
+        self.stream = sys.stdout
+        super().emit(record)
+
+
 # ── Formatters ────────────────────────────────────────────────────────────────
 
 class ConsoleFormatter(logging.Formatter):
@@ -102,7 +111,7 @@ def configure_logging(
     root.propagate = False
 
     # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler = _LiveStdoutHandler()
     console_handler.setFormatter(ConsoleFormatter())
     root.addHandler(console_handler)
 

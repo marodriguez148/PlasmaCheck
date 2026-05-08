@@ -14,6 +14,8 @@ class BasePage:
         self.URL = self._build_url(self.host, self.path)
         self.sign_out = "button:has-text('Sign Out')"
         self.anchor_element = ""
+        self.cookie_banner = "div[role='alertdialog']"
+        self.accept_cookies_button = "button[data-tid='banner-accept']"
 
     @property
     def current_url(self) -> str:
@@ -71,6 +73,11 @@ class BasePage:
         else:
             expect(self.page.locator(selector)).to_have_class(re.compile(expected_class), timeout=timeout)
 
+    def wait_for_elem_to_not_have_class(self, selector: str, unexpected_class: str, timeout: int = 5000) -> None:
+        logger.info(f"Waiting for element {selector} to not have class: {unexpected_class}")
+        class_name = self.page.locator(selector).get_attribute("class") or ""
+        assert unexpected_class not in class_name, f"Expected element {selector} to not have class '{unexpected_class}', but it does. Current classes: '{class_name}'"
+
     def wait_for_page_load(self) -> None:
         logger.info("Waiting for page to load.")
         self.page.wait_for_load_state("domcontentloaded")
@@ -93,6 +100,12 @@ class BasePage:
         logger.info(f"Verifying URL is correct: {expected_url}")
         expect(self.page).to_have_url(expected_url)
         # assert self.current_url == expected_url, f"Expected URL to be '{expected_url}', but got '{self.current_url}'"
+
+    def dismiss_cookie_banner(self) -> None:
+        logger.info("Attempting to dismiss cookie banner if present.")
+        if self.page.locator(self.cookie_banner).is_visible():
+            self.page.click(self.accept_cookies_button)
+            self.wait_for_elem_invisible(self.cookie_banner)
 
     def sign_out(self) -> None:
         logger.info("Attempting to sign out.")

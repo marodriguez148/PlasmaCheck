@@ -1,5 +1,6 @@
 from pages.member_dashboard_page import MemberDashboardPage
 from pages.booking_pages.select_plan_page import SelectPlanPage
+from pages.booking_pages.schedule_scan_page import ScheduleScanPage
 from tests.base_test import BaseTest
 from constants.constants import TEST_CREDENTIALS
 from playwright.sync_api import Page
@@ -16,3 +17,7 @@ class TestBookingScan(BaseTest):
         select_plan_page.verify_url()
         select_plan_page.verify_page_elements()
         select_plan_page.verify_selecting_plan("MRI Scan")
+        schedule_scan_page = ScheduleScanPage(page)
+        schedule_scan_page.verify_url()
+        schedule_scan_page.verify_page_elements()
+        schedule_scan_page.verify_scheduling_scan()

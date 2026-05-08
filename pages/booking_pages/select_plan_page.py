@@ -1,4 +1,3 @@
-import re
 import random
 
 from pages.base_page import BasePage
@@ -25,7 +24,7 @@ class SelectPlanPage(BasePage):
     def verify_page_elements(self) -> None:
         if "/sign-up" in self.current_url:
             self.wait_for_elem_visible(self.dob_input_selector)
-            self.sex_at_birth_dropdown_selector.wait_for_visible()
+            self.sex_at_birth_dropdown_selector.verify_elem_visible()
         expect(self.page.locator(self.plan_encounter_card_selector).first).to_be_visible() # Would get data from DB to get exact number of encounter cards
         self.wait_for_elem_visible(self.continue_button_selector)
         self.wait_for_elem_to_have_class(self.continue_button_selector, "--appear-disabled", strict=False)
@@ -37,8 +36,7 @@ class SelectPlanPage(BasePage):
             self.page.fill(self.dob_input_selector, "01011990")
             self.sex_at_birth_dropdown_selector.select_option(random.choice(["Male", "Female"]))
         self.select_plan_by_name(plan_name)
-        button_classes = self.page.locator(self.continue_button_selector).get_attribute("class") or ""
-        assert "--appear-disabled" not in button_classes
+        self.wait_for_elem_to_not_have_class(self.continue_button_selector, "--appear-disabled")
 
         self.page.click(self.continue_button_selector)
         

@@ -36,6 +36,7 @@ class LoginPage(BasePage):
             self.go_to_page()
             self.verify_login_page_elements()
             self.login()
+            self.dismiss_cookie_banner()
 
     def login(self) -> None:
         logger.info(f"Attempting to log in with member: {self.test_credentials}")
