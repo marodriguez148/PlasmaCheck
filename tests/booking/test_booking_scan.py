@@ -11,6 +11,19 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 class TestBookingScan(BaseTest):
+    """
+    Test Description:
+    1. Log in to member dashboard
+    2. Click "Book a Scan" button
+    3. Verify Select Plan page elements are visible
+    4. Select a plan and click continue
+    5. Verify Schedule Scan page elements are visible
+    6. Select a location, date, and time and click continue
+    7. Verify Reserve Appointment page elements are visible
+    8. Enter payment info and click continue
+    9. Verify Scan Confirmation page elements are visible
+    10. Click "Go to Dashboard" and verify URL
+    """
     def test_booking_scan(self, page: Page, test_card_info: dict) -> None:
         member_dashboard_page = MemberDashboardPage(
             page,
