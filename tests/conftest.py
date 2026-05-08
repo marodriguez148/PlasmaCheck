@@ -45,7 +45,10 @@ def page(request):
             raise ValueError(f"Unsupported browser: {browser_name}")
         
 
-        context = browser.new_context()
+        context = browser.new_context(
+            viewport={"width": 1440 , "height": 900},
+            screen={"width": 1440 , "height": 900}
+        )
         page = context.new_page() 
         yield page
         context.close()

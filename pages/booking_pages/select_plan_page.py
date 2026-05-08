@@ -3,7 +3,6 @@ import random
 from pages.base_page import BasePage
 from components.dropdown import Dropdown
 from playwright.sync_api import Page, expect
-from constants.constants import MEMBER_FACING_PORTAL_URL
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -11,9 +10,18 @@ logger = get_logger(__name__)
 
 class SelectPlanPage(BasePage):
     PATH = "/sign-up/select-plan"
+    RETURNING_PATH = "/book-scan/select-plan"
 
-    def __init__(self, page: Page, host: str = MEMBER_FACING_PORTAL_URL):
-        super().__init__(page, host=host, path=self.PATH)
+    @classmethod
+    def for_new_user(cls, page: Page) -> "SelectPlanPage":
+        return cls(page, path=cls.PATH)
+
+    @classmethod
+    def for_returning_user(cls, page: Page) -> "SelectPlanPage":
+        return cls(page, path=cls.RETURNING_PATH)
+
+    def __init__(self, page: Page, path: str = PATH):
+        super().__init__(page, path=path)
         self.page_title = "Select Your Plan"
         self.dob_input_selector = "input[id='dob']"
         self.sex_at_birth_dropdown_selector = Dropdown(self.page, "div[class='multiselect']", options=["Male", "Female"])

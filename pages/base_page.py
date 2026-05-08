@@ -25,7 +25,7 @@ class BasePage:
     def _build_url(host: str, path: str = "") -> str:
         clean_host = host.rstrip("/")
         clean_path = path.lstrip("/")
-        return f"{clean_host}/{clean_path}" if clean_path else clean_host
+        return f"{clean_host}/{clean_path}"
 
     def go_to_page(self, path: str | None = None) -> None:
         target_url = self._build_url(self.host, path if path is not None else self.path)
@@ -95,11 +95,10 @@ class BasePage:
         logger.info(f"Verifying URL contains substring: {expected_substring}")
         assert expected_substring in self.current_url, f"Expected URL to contain '{expected_substring}', but got '{self.current_url}'"
 
-    def verify_url(self, expected_url: str | None = None) -> None:
+    def verify_url(self, expected_url: str | None = None, timeout: int = 5000) -> None:
         expected_url = expected_url or self.URL
         logger.info(f"Verifying URL is correct: {expected_url}")
-        expect(self.page).to_have_url(expected_url)
-        # assert self.current_url == expected_url, f"Expected URL to be '{expected_url}', but got '{self.current_url}'"
+        expect(self.page).to_have_url(expected_url, timeout=timeout)
 
     def dismiss_cookie_banner(self) -> None:
         logger.info("Attempting to dismiss cookie banner if present.")

@@ -9,9 +9,18 @@ logger = get_logger(__name__)
 
 class ScheduleScanPage(BasePage):
     PATH = "/sign-up/schedule-scan"
+    RETURNING_PATH = "/book-scan/schedule-scan"
 
-    def __init__(self, page: Page):
-        super().__init__(page, path=self.PATH)
+    @classmethod
+    def for_new_user(cls, page: Page) -> "ScheduleScanPage":
+        return cls(page, path=cls.PATH)
+
+    @classmethod
+    def for_returning_user(cls, page: Page) -> "ScheduleScanPage":
+        return cls(page, path=cls.RETURNING_PATH)
+
+    def __init__(self, page: Page, path: str = PATH):
+        super().__init__(page, path=path)
         self.page_title = "Schedule Your Scan"
         self.state_dropdown_options = [
             "Alaska",
@@ -49,11 +58,11 @@ class ScheduleScanPage(BasePage):
         self.select_location()
         self.wait_for_elem_visible(self.calendar_selector, timeout=30000)
         open_dates = self.page.locator(self.calendar_open_date_selector).all()
-        logger.info(f"Found {len(open_dates)} open dates on the calendar.")
+        # logger.info(f"Found {len(open_dates)} open dates on the calendar.")
         random.choice(open_dates).click()
         self.wait_for_elem_visible(self.time_selector)
         available_time_slots = self.page.locator(self.time_slot_selector).all()
-        logger.info(f"Found {len(available_time_slots)} available time slots for the selected date.")
+        # logger.info(f"Found {len(available_time_slots)} available time slots for the selected date.")
         random.choice(available_time_slots).click()
         self.wait_for_elem_to_not_have_class(self.continue_button_selector, "--appear-disabled")
         self.page.click(self.continue_button_selector)

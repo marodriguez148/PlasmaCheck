@@ -28,6 +28,13 @@ class BaseComponent:
         logger.info(f"Clicking element: {self.selector_text}")
         self.root.click()
 
+    def scroll_to_component(self, selector: str = None) -> None:
+        logger.info(f"Scrolling to component: {self.selector_text}")
+        if selector:
+            self.page.locator(selector).scroll_into_view_if_needed()
+        else:
+            self.root.scroll_into_view_if_needed()
+
     def fill(self, value: str) -> None:
         logger.info(f"Filling element {self.selector_text} with: {value}")
         self.root.fill(value)
