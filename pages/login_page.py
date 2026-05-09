@@ -66,3 +66,18 @@ class LoginPage(BasePage):
         self.login()
         self.wait_for_elem_visible(self.email_error_message)
         self.wait_for_elem_to_have_class(self.submit_button, "--appear-disabled", strict=False)
+
+    def get_bearer_token(self) -> str | None:
+        token = {}
+
+        def capture_token(request):
+            auth = request.headers.get("authorization", "")
+            if auth.startswith("Bearer ") and "value" not in token:
+                token["value"] = auth.removeprefix("Bearer ")
+
+        self.page.on("request", capture_token)
+        self.page.reload()
+        self.wait_for_page_load()
+        self.page.remove_listener("request", capture_token)
+
+        return token.get("value")
