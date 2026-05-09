@@ -75,11 +75,6 @@ python plasma_check.py --headless
 python plasma_check.py --browser firefox
 ```
 
-**List collected tests without running**
-```bash
-python plasma_check.py --list
-```
-
 ---
 
 ## Project Structure
