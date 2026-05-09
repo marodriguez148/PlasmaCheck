@@ -20,7 +20,6 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
-
 # ── Custom level: STEP ────────────────────────────────────────────────────────
 # Sits between INFO (20) and WARNING (30) — used to mark high-level test steps.
 STEP_LEVEL = 25
@@ -37,8 +36,10 @@ logging.Logger.step = _step  # type: ignore[attr-defined]
 
 # ── Handlers ─────────────────────────────────────────────────────────────────
 
+
 class _LiveStdoutHandler(logging.StreamHandler):
     """Resolves sys.stdout at emit time so pytest's in-process capture can't invalidate it."""
+
     def emit(self, record: logging.LogRecord) -> None:
         self.stream = sys.stdout
         super().emit(record)
@@ -46,25 +47,26 @@ class _LiveStdoutHandler(logging.StreamHandler):
 
 # ── Formatters ────────────────────────────────────────────────────────────────
 
+
 class ConsoleFormatter(logging.Formatter):
     """Coloured, human-readable output for the terminal."""
 
     LEVEL_COLOURS = {
-        logging.DEBUG:    "\033[37m",       # grey
-        logging.INFO:     "\033[36m",       # cyan
-        STEP_LEVEL:       "\033[35;1m",     # bold magenta
-        logging.WARNING:  "\033[33m",       # yellow
-        logging.ERROR:    "\033[31m",       # red
-        logging.CRITICAL: "\033[31;1m",     # bold red
+        logging.DEBUG: "\033[37m",  # grey
+        logging.INFO: "\033[36m",  # cyan
+        STEP_LEVEL: "\033[35;1m",  # bold magenta
+        logging.WARNING: "\033[33m",  # yellow
+        logging.ERROR: "\033[31m",  # red
+        logging.CRITICAL: "\033[31;1m",  # bold red
     }
     RESET = "\033[0m"
     LEVEL_WIDTH = 8  # pads level names to a fixed width
 
     def format(self, record: logging.LogRecord) -> str:
         colour = self.LEVEL_COLOURS.get(record.levelno, "")
-        level  = f"{record.levelname:<{self.LEVEL_WIDTH}}"
-        name   = f"{record.name}"
-        msg    = record.getMessage()
+        level = f"{record.levelname:<{self.LEVEL_WIDTH}}"
+        name = f"{record.name}"
+        msg = record.getMessage()
 
         # Include exception info if present
         if record.exc_info:
@@ -115,13 +117,13 @@ def configure_logging(
     console_handler.setFormatter(ConsoleFormatter())
     root.addHandler(console_handler)
 
-    # File handler 
+    # File handler
     if log_dir is not None:
         log_path = Path(log_dir)
         log_path.mkdir(parents=True, exist_ok=True)
 
         if log_filename is None:
-            timestamp    = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             log_filename = f"plasma_{timestamp}.log"
 
         file_handler = logging.FileHandler(log_path / log_filename, encoding="utf-8")

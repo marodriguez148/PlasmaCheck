@@ -6,8 +6,11 @@ from constants.constants import MEMBER_FACING_PORTAL_URL
 
 logger = get_logger(__name__)
 
+
 class BasePage:
-    def __init__(self, page: Page, host: str = MEMBER_FACING_PORTAL_URL, path: str = "") -> None:
+    def __init__(
+        self, page: Page, host: str = MEMBER_FACING_PORTAL_URL, path: str = ""
+    ) -> None:
         self.page = page
         self.host = host.rstrip("/")
         self.path = path.lstrip("/")
@@ -20,7 +23,7 @@ class BasePage:
     @property
     def current_url(self) -> str:
         return self.page.url
-    
+
     @staticmethod
     def _build_url(host: str, path: str = "") -> str:
         clean_host = host.rstrip("/")
@@ -45,7 +48,7 @@ class BasePage:
     def hover(self, selector: str) -> None:
         logger.info(f"Hovering over element: {selector}")
         self.page.locator(selector).hover()
-    
+
     def scroll_to_element(self, selector: str) -> None:
         logger.info(f"Scrolling to element: {selector}")
         self.page.locator(selector).scroll_into_view_if_needed()
@@ -62,21 +65,39 @@ class BasePage:
         logger.info(f"Waiting for element to be clickable: {selector}")
         expect(self.page.locator(selector)).to_be_enabled(timeout=timeout)
 
-    def wait_for_elem_to_have_text(self, selector: str, expected_text: str, timeout: int = 5000) -> None:
+    def wait_for_elem_to_have_text(
+        self, selector: str, expected_text: str, timeout: int = 5000
+    ) -> None:
         logger.info(f"Waiting for element {selector} to have text: {expected_text}")
         expect(self.page.locator(selector)).to_have_text(expected_text, timeout=timeout)
 
-    def wait_for_elem_to_have_class(self, selector: str, expected_class: str, strict: bool = True, timeout: int = 5000) -> None:
+    def wait_for_elem_to_have_class(
+        self,
+        selector: str,
+        expected_class: str,
+        strict: bool = True,
+        timeout: int = 5000,
+    ) -> None:
         logger.info(f"Waiting for element {selector} to have class: {expected_class}")
         if strict:
-            expect(self.page.locator(selector)).to_have_class(expected_class, timeout=timeout)
+            expect(self.page.locator(selector)).to_have_class(
+                expected_class, timeout=timeout
+            )
         else:
-            expect(self.page.locator(selector)).to_have_class(re.compile(expected_class), timeout=timeout)
+            expect(self.page.locator(selector)).to_have_class(
+                re.compile(expected_class), timeout=timeout
+            )
 
-    def wait_for_elem_to_not_have_class(self, selector: str, unexpected_class: str, timeout: int = 5000) -> None:
-        logger.info(f"Waiting for element {selector} to not have class: {unexpected_class}")
+    def wait_for_elem_to_not_have_class(
+        self, selector: str, unexpected_class: str, timeout: int = 5000
+    ) -> None:
+        logger.info(
+            f"Waiting for element {selector} to not have class: {unexpected_class}"
+        )
         class_name = self.page.locator(selector).get_attribute("class") or ""
-        assert unexpected_class not in class_name, f"Expected element {selector} to not have class '{unexpected_class}', but it does. Current classes: '{class_name}'"
+        assert (
+            unexpected_class not in class_name
+        ), f"Expected element {selector} to not have class '{unexpected_class}', but it does. Current classes: '{class_name}'"
 
     def wait_for_page_load(self) -> None:
         logger.info("Waiting for page to load.")
@@ -86,14 +107,16 @@ class BasePage:
     def is_enabled(self, selector: str) -> bool:
         logger.info(f"Checking if element is enabled: {selector}")
         return self.page.locator(selector).is_enabled()
-    
+
     def is_disabled(self, selector: str) -> bool:
         logger.info(f"Checking if element is disabled: {selector}")
         return self.page.locator(selector).is_disabled()
 
     def verify_url_contains(self, expected_substring: str) -> None:
         logger.info(f"Verifying URL contains substring: {expected_substring}")
-        assert expected_substring in self.current_url, f"Expected URL to contain '{expected_substring}', but got '{self.current_url}'"
+        assert (
+            expected_substring in self.current_url
+        ), f"Expected URL to contain '{expected_substring}', but got '{self.current_url}'"
 
     def verify_url(self, expected_url: str | None = None, timeout: int = 5000) -> None:
         expected_url = expected_url or self.URL
@@ -110,4 +133,6 @@ class BasePage:
         logger.info("Attempting to sign out.")
         self.page.click(self.sign_out)
         self.wait_for_elem_invisible("button[class*='desktop-logout']")
-        assert "/sign_in" in self.current_url, f"Expected to be redirected to login page after sign out, but current URL is '{self.current_url}'"
+        assert (
+            "/sign_in" in self.current_url
+        ), f"Expected to be redirected to login page after sign out, but current URL is '{self.current_url}'"

@@ -10,23 +10,22 @@ def test_card_info():
             "expiration_date": "12/28",
             "cvv": "123",
             "zip_code": "12345",
-            "country": "US"
+            "country": "US",
         },
         {
             "card_number": "5555555555554444",
             "expiration_date": "11/28",
             "cvv": "456",
             "zip_code": "54321",
-            "country": "US"
+            "country": "US",
         },
         {
             "card_number": "378282246310005",
             "expiration_date": "10/28",
             "cvv": "789",
             "zip_code": "67890",
-            "country": "US"
-        }
+            "country": "US",
+        },
     ]
-
 
     return random.choice(card_list)

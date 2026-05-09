@@ -1,4 +1,3 @@
-
 from pages.base_page import BasePage
 from playwright.sync_api import Page
 from constants.constants import MEMBER_FACING_PORTAL_URL, PROVIDER_FACING_PORTAL_URL
@@ -6,17 +5,18 @@ from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+
 class LoginPage(BasePage):
     PATH = "sign-in"
 
     def __init__(
-            self,
-            page: Page,
-            host: str = MEMBER_FACING_PORTAL_URL,
-            path: str = PATH,
-            test_credentials: dict = None,
-            login_required: bool = True
-        ) -> None:
+        self,
+        page: Page,
+        host: str = MEMBER_FACING_PORTAL_URL,
+        path: str = PATH,
+        test_credentials: dict = None,
+        login_required: bool = True,
+    ) -> None:
         super().__init__(page, host=host, path=path)
         self.test_credentials = test_credentials
         self.username_input = "input[id='email']"
@@ -65,7 +65,9 @@ class LoginPage(BasePage):
         self.verify_login_page_elements()
         self.login()
         self.wait_for_elem_visible(self.email_error_message)
-        self.wait_for_elem_to_have_class(self.submit_button, "--appear-disabled", strict=False)
+        self.wait_for_elem_to_have_class(
+            self.submit_button, "--appear-disabled", strict=False
+        )
 
     def get_bearer_token(self) -> str | None:
         token = {}

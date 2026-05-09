@@ -23,7 +23,11 @@ def log_test_boundaries(request):
     root.info("=" * 60)
     yield
     rep = getattr(request.node, "rep_call", None)
-    outcome = "PASSED" if rep and rep.passed else "FAILED" if rep and rep.failed else "UNKNOWN"
+    outcome = (
+        "PASSED"
+        if rep and rep.passed
+        else "FAILED" if rep and rep.failed else "UNKNOWN"
+    )
     root.info("END: %s (%s)", request.node.name, outcome)
     root.info("=" * 60)
 
@@ -32,7 +36,6 @@ def log_test_boundaries(request):
 def page(request):
     browser_name = request.config.getoption("--browser")[0]
     headless = request.config.getoption("--headed")
-
 
     with sync_playwright() as p:
         if browser_name == "chromium":
@@ -43,13 +46,12 @@ def page(request):
             browser = p.webkit.launch(headless=headless)
         else:
             raise ValueError(f"Unsupported browser: {browser_name}")
-        
 
         context = browser.new_context(
-            viewport={"width": 1440 , "height": 900},
-            screen={"width": 1440 , "height": 900}
+            viewport={"width": 1440, "height": 900},
+            screen={"width": 1440, "height": 900},
         )
-        page = context.new_page() 
+        page = context.new_page()
         yield page
         context.close()
         browser.close()

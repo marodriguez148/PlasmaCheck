@@ -37,7 +37,9 @@ class ReserveAppointmentPage(BasePage):
         card_locators = self.payment_info_accordion.accordion_elements["Card"]
         frame = self.payment_info_accordion.frame
         frame.locator(card_locators["card_number"]).fill(card_info["card_number"])
-        frame.locator(card_locators["expiration_date"]).fill(card_info["expiration_date"])
+        frame.locator(card_locators["expiration_date"]).fill(
+            card_info["expiration_date"]
+        )
         frame.locator(card_locators["cvv"]).fill(card_info["cvv"])
         frame.locator(card_locators["zip_code"]).fill(card_info["zip_code"])
         frame.locator(card_locators["country"]).select_option(card_info["country"])
@@ -47,7 +49,6 @@ class ReserveAppointmentPage(BasePage):
         if optional.get("phone") and card_info.get("phone"):
             frame.locator(optional["phone"]).fill(card_info["phone"])
         self.page.click(self.continue_button_selector)
-
 
 
 class PaymentInfoAccordion(Accordion):
@@ -63,13 +64,13 @@ class PaymentInfoAccordion(Accordion):
                 "optional_fields": {
                     "email": "input[id='payment-linkEmailInput']",
                     "phone": "input[id='payment-linkMobilePhoneInput']",
-                }
+                },
             },
             "link": {
                 "bank_name": "input[id='payment-bankInput']",
             },
             "Affirm": {
                 "learn_more_button": "button:has-text('Learn More')",
-                "description_text": "span[data-testid='next-action-text']"
-            }
+                "description_text": "span[data-testid='next-action-text']",
+            },
         }

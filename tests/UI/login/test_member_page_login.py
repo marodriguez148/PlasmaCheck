@@ -13,10 +13,10 @@ class TestMemberPageLogin(BaseTest):
     3. Log in with valid credentials
     4. Verify member dashboard page elements are visible
     """
+
     def test_member_page_login(self, page: Page) -> None:
         member_dashboard_page = MemberDashboardPage(
-            page, 
-            test_credentials=TEST_CREDENTIALS["default_qa_user"]
+            page, test_credentials=TEST_CREDENTIALS["default_qa_user"]
         )
         member_dashboard_page.verify_url()
         member_dashboard_page.verify_dashboard_elements()
@@ -28,10 +28,11 @@ class TestMemberPageLogin(BaseTest):
     3. Log in with invalid credentials
     4. Verify error message is displayed
     """
+
     def test_invalid_member_page_login(self, page: Page) -> None:
         login_page = LoginPage(
-            page, 
+            page,
             test_credentials={"username": "invalid_user", "password": "invalid_pass"},
-            login_required=False
+            login_required=False,
         )
         login_page.verify_invalid_login()

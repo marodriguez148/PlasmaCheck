@@ -6,6 +6,7 @@ from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+
 class TestBookingAPI(BaseAPITest):
     def test_get_licensed_states(self, user_token):
 
@@ -18,15 +19,40 @@ class TestBookingAPI(BaseAPITest):
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-site",
-            "Priority": "u=0"
+            "Priority": "u=0",
         }
         response = self.request("GET", endpoint, token=user_token, headers=headers)
-        
-        expected_states = ["AK","AL","AS","AZ","CA","CO","CT","DE","FL","KS","KY","LA","MN","NJ","NY","TN","TX","UT"]
-        assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+
+        expected_states = [
+            "AK",
+            "AL",
+            "AS",
+            "AZ",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "KS",
+            "KY",
+            "LA",
+            "MN",
+            "NJ",
+            "NY",
+            "TN",
+            "TX",
+            "UT",
+        ]
+        assert (
+            response.status_code == 200
+        ), f"Expected status code 200, got {response.status_code}"
         licensed_states = response.json()
-        assert isinstance(licensed_states, list), f"Expected licensed states to be a list, got {type(licensed_states)}"
-        assert licensed_states == expected_states, "Expected licensed states list to equal expected list of states"
+        assert isinstance(
+            licensed_states, list
+        ), f"Expected licensed states to be a list, got {type(licensed_states)}"
+        assert (
+            licensed_states == expected_states
+        ), "Expected licensed states list to equal expected list of states"
 
     def test_booking_stages(self, user_token):
         endpoint = "/individuals/api/members/bookingstage"
@@ -45,9 +71,14 @@ class TestBookingAPI(BaseAPITest):
         for stage in stage_list:
             json_data = {
                 "encounterId": encounter_id,
-                "memberId": "1bff6562-96d3-4585-ad22-767a9081ac62", #Default qa user member_id
+                "memberId": "1bff6562-96d3-4585-ad22-767a9081ac62",  # Default qa user member_id
                 "stage": stage,
-                "visitedOn": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.") + f"{datetime.now().microsecond // 1000:03d}Z"
+                "visitedOn": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.")
+                + f"{datetime.now().microsecond // 1000:03d}Z",
             }
-            response = self.request("POST", endpoint, token=user_token, headers=headers, json=json_data)
-            assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+            response = self.request(
+                "POST", endpoint, token=user_token, headers=headers, json=json_data
+            )
+            assert (
+                response.status_code == 200
+            ), f"Expected status code 200, got {response.status_code}"

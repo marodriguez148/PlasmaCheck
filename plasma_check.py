@@ -1,9 +1,9 @@
 """
 plasma_checker — a CLI wrapper around pytest + Playwright.
- 
+
 Usage:
     python plasma_checker.py [OPTIONS] [TESTS...]
- 
+
 Examples:
     python plasma_checker.py                              # run all tests, chromium
     python plasma_checker.py tests/test_login.py          # run a specific file
@@ -11,17 +11,17 @@ Examples:
     python plasma_checker.py -m smoke --headless          # smoke suite, headless
     python plasma_checker.py --list                       # list collected tests
 """
- 
+
 import argparse
 import sys
 
 import pytest
 
 from utils.logger import configure_logging, get_logger
- 
+
 logger = get_logger(__name__)
 
- 
+
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="plasma_checker",
@@ -29,7 +29,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
- 
+
     # ── Test selection ────────────────────────────────────────────────────────
     parser.add_argument(
         "tests",
@@ -53,7 +53,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="List collected tests without running them (pytest --collect-only)",
     )
- 
+
     # ── Browser options ───────────────────────────────────────────────────────
     parser.add_argument(
         "--browser",
@@ -67,20 +67,22 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Run browser in headless mode",
     )
 
- 
     # ── Output / reporting ────────────────────────────────────────────────────
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
         help="Verbose output",
     )
     parser.add_argument(
-        "-q", "--quiet",
+        "-q",
+        "--quiet",
         action="store_true",
         help="Minimal output",
     )
     parser.add_argument(
-        "--log-level", default="INFO",
+        "--log-level",
+        default="INFO",
         choices=["DEBUG", "INFO", "STEP", "WARNING", "ERROR"],
         help="Plasma Checker log level (default: INFO)",
     )
@@ -101,10 +103,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default="only-on-failure",
         help="When to capture screenshots (default: only-on-failure)",
     )
- 
+
     # ── Execution control ─────────────────────────────────────────────────────
     parser.add_argument(
-        "-x", "--exitfirst",
+        "-x",
+        "--exitfirst",
         action="store_true",
         help="Stop after the first failure",
     )
@@ -116,16 +119,17 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Retry failed tests N times (requires pytest-rerunfailures)",
     )
     parser.add_argument(
-        "-n", "--workers",
+        "-n",
+        "--workers",
         type=int,
         default=1,
         metavar="N",
         help="Number of parallel workers (requires pytest-xdist)",
     )
- 
+
     return parser
- 
- 
+
+
 def build_pytest_args(args: argparse.Namespace) -> list[str]:
     """Translate plasma_checker args into a pytest.main() argument list."""
     cmd = []
@@ -164,12 +168,12 @@ def build_pytest_args(args: argparse.Namespace) -> list[str]:
         cmd.extend(["-n", str(args.workers)])
 
     return cmd
- 
- 
+
+
 def main() -> int:
     parser = build_arg_parser()
     args = parser.parse_args()
- 
+
     configure_logging(level=args.log_level, log_dir=args.log_dir)
 
     logger.info("plasma_checker starting")
@@ -188,6 +192,6 @@ def main() -> int:
 
     return exit_code
 
- 
+
 if __name__ == "__main__":
     sys.exit(main())

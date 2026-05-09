@@ -49,16 +49,21 @@ class BaseComponent:
         logger.info(f"Verifying element {self.selector_text} has text: {expected_text}")
         expect(self.root).to_have_text(expected_text, timeout=timeout)
 
-    def verify_has_class(self, expected_class: str, selector: str = None, strict: bool = True, timeout: int = 5000) -> None:
+    def verify_has_class(
+        self,
+        expected_class: str,
+        selector: str = None,
+        strict: bool = True,
+        timeout: int = 5000,
+    ) -> None:
         if selector:
             class_selector = selector
         else:
             class_selector = self.selector_text
-            
+
         logger.info(f"Verifying element {class_selector} has class: {expected_class}")
         locator = self.root.locator(class_selector)
         if strict:
             expect(locator).to_have_class(expected_class, timeout=timeout)
         else:
             expect(locator).to_have_class(re.compile(expected_class), timeout=timeout)
-
